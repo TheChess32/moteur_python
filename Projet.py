@@ -18,27 +18,37 @@ def vers_csv(nom, ordre):
 accounts = depuis_csv("Accounts")
 
 def verifPassword(pseudo, mdp):
-    
-def cryptagePassword(mdp):
+    global accounts
+    if accountExists(pseudo):
+        for account in accounts:
+            if account["Pseudo"] == pseudo:
+                mdp_crypte = account["Mot de passe"]
+                chiffre_de_cryptage = int(account["Chiffre de cryptage"])
+                print (cryptagePassword(mdp, chiffre_de_cryptage))
+                if str(cryptagePassword(mdp, chiffre_de_cryptage)) == mdp_crypte:
+                    return True
+                else:
+                    return False
+
+def cryptagePassword(mdp, chiffre_de_cryptage):
     mdp_crypte=[]
-    chiffre_de_cryptage = randint(5,100)
     for car in mdp:
         mdp_crypte.append(ord(car)+chiffre_de_cryptage)
-    return mdp_crypte, chiffre_de_cryptage
+    return mdp_crypte
 
 def accountExists(pseudo):
     global accounts
-    for x in accounts:
-        if x["Pseudo"] == pseudo:
+    for account in accounts:
+        if account["Pseudo"] == pseudo:
             return True
     return False
 
 def createAccount(pseudo, mdp):
     global accounts
     new_donnees = {}
-    cryptage = cryptagePassword(mdp)
-    mdp = cryptage[0]
-    chiffre_de_cryptage = cryptage[1]
+    chiffre_de_cryptage = randint(5,100)
+    cryptage = cryptagePassword(mdp, chiffre_de_cryptage)
+    mdp = cryptage
     if accountExists(pseudo):
         print(f"{pseudo} est déjà utilisé !")
     else: 
