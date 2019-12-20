@@ -98,10 +98,12 @@ def accueil():
         entree_mdp=tk.Entry(right_frame, bg="#2B7589", font=("Helvetica",20), fg="white", justify = "center", show="*")
         entree_mdp.pack()
         
-        def pre_connect(event, entree=entree_pseudo):
-            entree.update()
-            pseudo = entree.get()
-            return connect(event, pseudo)
+        def pre_connect(event, pseudo_=entree_pseudo, mdp_=entree_mdp):
+            pseudo_.update()
+            pseudo = pseudo_.get()
+            mdp_.update()
+            mdp = mdp_.get()
+            return connect(event, pseudo, mdp)
             
         accueil.bind("<Return>", pre_connect)
         
@@ -113,10 +115,12 @@ def accueil():
     accueil.mainloop()
 
 
-def connect(event, mdp):
+def connect(event, pseudo, mdp):
     global connected
-    print(mdp)
-    connected = True
+    if verifPassword(pseudo, mdp):
+        connected = True
+    else:
+        print("false")
 
 accueil()
 vers_csv("accounts", ["Pseudo", "Mot de passe", "Chiffre de cryptage"])
