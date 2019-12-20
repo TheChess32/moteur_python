@@ -3,7 +3,6 @@ import csv
 from random import *
 
 connected = False
-test = "aa"
 
 def depuis_csv(fichier):
     fichier1=open(fichier + '.csv','r',encoding='utf-8')
