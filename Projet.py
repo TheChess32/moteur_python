@@ -2,7 +2,8 @@ import tkinter as tk
 import csv
 from random import *
 
-accueil = tk.Tk()
+connected = False
+test = "aa"
 
 def depuis_csv(fichier):
     fichier1=open(fichier + '.csv','r',encoding='utf-8')
@@ -60,22 +61,63 @@ def createAccount(pseudo, mdp):
         accounts.append(new_donnees)
 
 def accueil():
+    # Création de la fenêtre
     accueil = tk.Tk()
     accueil.title("Accueil")
     accueil.geometry("1080x720")
     accueil.minsize(540, 360)
     accueil.maxsize(1080, 720)
     accueil.iconbitmap("logo.ico")
-    accueil.config(background = "#0EABB8")
+    accueil.config(background = "#0B5A6F")
+                   
+    #fenetre = tk.Canvas(accueil, bg="#0EABB8")
+    #fenetre.pack()
 
     menu_bar = tk.Menu(accueil)
     file_menu = tk.Menu(menu_bar, tearoff=0)
-    file_menu.add_command(label = "Fermer", command=accueil.quit)
+    file_menu.add_command(label = "Fermer", command=accueil.destroy)
     menu_bar.add_cascade(label="Menu", menu=file_menu)
+    
+    frame = tk.Frame(accueil, bg = "#0B5A6F")
+    right_frame = tk.Frame(frame, bg = "#0B5A6F")
+    
+    if connected:
+        print("")
+    else:
+        titre_seconnecter = tk.Label(right_frame, text = "Se connecter :", bg="#0B5A6F", font=("Helvetica",50), fg="white", justify = "center")
+        titre_seconnecter.pack()
+        titre_vide = tk.Label(right_frame, text = "", bg="#0B5A6F", font=("Helvetica",50), fg="white", justify = "center")
+        titre_vide.pack()
+        
+        titre_pseudo = tk.Label(right_frame, text = "Entrez votre pseudo :", bg="#0B5A6F", font=("Helvetica",20), fg="white", justify = "center")
+        titre_pseudo.pack()
+        entree_pseudo=tk.Entry(right_frame, bg="#2B7589", font=("Helvetica",20), fg="white", justify = "center")
+        entree_pseudo.pack()
+        
+        titre_mdp = tk.Label(right_frame, text = "Entrez votre mot de passe :", bg="#0B5A6F", font=("Helvetica",20), fg="white", justify = "center")
+        titre_mdp.pack()
+        entree_mdp=tk.Entry(right_frame, bg="#2B7589", font=("Helvetica",20), fg="white", justify = "center", show="*")
+        entree_mdp.pack()
+        
+        def pre_connect(event, entree=entree_pseudo):
+            entree.update()
+            pseudo = entree.get()
+            return connect(event, pseudo)
+            
+        accueil.bind("<Return>", pre_connect)
+        
+        right_frame.grid(row=0, column = 1, sticky=tk.W)
+        frame.pack(expand=tk.YES)
     
     accueil.config(menu=menu_bar)
     
     accueil.mainloop()
+
+
+def connect(event, mdp):
+    global connected
+    print(mdp)
+    connected = True
 
 accueil()
 vers_csv("accounts", ["Pseudo", "Mot de passe", "Chiffre de cryptage"])
