@@ -1,6 +1,6 @@
 import tkinter as tk
 import csv
-from random import *
+import random as rdm
 
 connected = False
 
@@ -26,7 +26,6 @@ def verifPassword(pseudo, mdp):
             if account["Pseudo"] == pseudo:
                 mdp_crypte = account["Mot de passe"]
                 chiffre_de_cryptage = int(account["Chiffre de cryptage"])
-                print (cryptagePassword(mdp, chiffre_de_cryptage))
                 if str(cryptagePassword(mdp, chiffre_de_cryptage)) == mdp_crypte:
                     return True
                 else:
@@ -48,7 +47,7 @@ def accountExists(pseudo):
 def createAccount(pseudo, mdp):
     global accounts
     new_donnees = {}
-    chiffre_de_cryptage = randint(5,100)
+    chiffre_de_cryptage = rdm.randint(5,100)
     cryptage = cryptagePassword(mdp, chiffre_de_cryptage)
     mdp = cryptage
     if accountExists(pseudo):
@@ -59,24 +58,31 @@ def createAccount(pseudo, mdp):
         new_donnees["Chiffre de cryptage"] = chiffre_de_cryptage
         accounts.append(new_donnees)
 
-def accueil():
-    # Création de la fenêtre
-    accueil = tk.Tk()
-    accueil.title("Accueil")
-    accueil.geometry("1080x720")
-    accueil.minsize(540, 360)
-    accueil.maxsize(1080, 720)
-    accueil.iconbitmap("logo.ico")
-    accueil.config(background = "#0B5A6F")
-                   
-    #fenetre = tk.Canvas(accueil, bg="#0EABB8")
-    #fenetre.pack()
-
+def create_menu(accueil):
     menu_bar = tk.Menu(accueil)
     file_menu = tk.Menu(menu_bar, tearoff=0)
     file_menu.add_command(label = "Fermer", command=accueil.destroy)
-    menu_bar.add_cascade(label="Menu", menu=file_menu)
     
+    def pre_accueil_connexion(accueil = accueil):
+        return accueil_connexion(accueil)
+    
+    def pre_accueil_creation(accueil = accueil):
+        return accueil_creation(accueil)
+    
+    connexion = tk.Menu(menu_bar, tearoff=0)
+    connexion.add_command(label = "Se connecter", command=pre_accueil_connexion)
+    connexion.add_command(label = "Créer un compte", command=pre_accueil_creation)
+    
+    menu_bar.add_cascade(label="Menu", menu=file_menu)
+    menu_bar.add_cascade(label="Connexion", menu=connexion)
+    
+    accueil.config(menu=menu_bar)
+
+def accueil_connexion(accueil):
+    for widget in accueil.winfo_children():
+        widget.destroy()
+    
+    create_menu(accueil)
     frame = tk.Frame(accueil, bg = "#0B5A6F")
     right_frame = tk.Frame(frame, bg = "#0B5A6F")
     
@@ -90,35 +96,90 @@ def accueil():
         
         titre_pseudo = tk.Label(right_frame, text = "Entrez votre pseudo :", bg="#0B5A6F", font=("Helvetica",20), fg="white", justify = "center")
         titre_pseudo.pack()
-        entree_pseudo=tk.Entry(right_frame, bg="#2B7589", font=("Helvetica",20), fg="white", justify = "center")
+        entree_pseudo=tk.Entry(right_frame, bg="#2B7589", font=("Helvetica",20), fg="white", justify = "center", bd=0)
         entree_pseudo.pack()
         
         titre_mdp = tk.Label(right_frame, text = "Entrez votre mot de passe :", bg="#0B5A6F", font=("Helvetica",20), fg="white", justify = "center")
         titre_mdp.pack()
-        entree_mdp=tk.Entry(right_frame, bg="#2B7589", font=("Helvetica",20), fg="white", justify = "center", show="*")
+        entree_mdp=tk.Entry(right_frame, bg="#2B7589", font=("Helvetica",20), fg="white", justify = "center", show="*", bd=0)
         entree_mdp.pack()
         
-        def pre_connect(event, pseudo_=entree_pseudo, mdp_=entree_mdp):
+        bouton_confirmer = tk.Button(right_frame, text = "Valider", bg="#0B5A6F", font=("Helvetica",20), fg="white", justify = "center", relief="raised")
+        bouton_confirmer.pack()
+        
+        titre_vide3 = tk.Label(right_frame, text = "", bg="#0B5A6F", font=("Helvetica",20), fg="white", justify = "center")
+        titre_vide3.pack()
+        bouton_creer_compte = tk.Button(right_frame, text="Créer un compte",bg="#0B5A6F",font=("Helvetica",10),fg="white",justify="center",bd=0,activebackground = "#0B5A6F",activeforeground="#2B7589")
+        bouton_creer_compte.pack()
+        
+        def pre_connect(event, pseudo_=entree_pseudo, mdp_=entree_mdp, frame=frame):
             pseudo_.update()
             pseudo = pseudo_.get()
             mdp_.update()
             mdp = mdp_.get()
-            return connect(event, pseudo, mdp)
-            
+            return connect(event, pseudo, mdp, frame)
+        
+        def pre_accueil_creation(event, accueil = accueil):
+            return accueil_creation(accueil)
+        
         accueil.bind("<Return>", pre_connect)
+        bouton_confirmer.bind("<1>", pre_connect)
+        bouton_creer_compte.bind("<1>", pre_accueil_creation)
         
         right_frame.grid(row=0, column = 1, sticky=tk.W)
         frame.pack(expand=tk.YES)
+
+def accueil_creation(accueil):
+    for widget in accueil.winfo_children():
+        widget.destroy()
     
-    accueil.config(menu=menu_bar)
+    create_menu(accueil)
+    
+    frame = tk.Frame(accueil, bg = "#0B5A6F")    
+    right_frame = tk.Frame(frame, bg = "#0B5A6F")
+    
+    titre_creation = tk.Label(right_frame, text = "Créer un compte :", bg="#0B5A6F", font=("Helvetica",50), fg="white", justify = "center")
+    titre_creation.pack()
+    titre_vide = tk.Label(right_frame, text = "", bg="#0B5A6F", font=("Helvetica",50), fg="white", justify = "center")
+    titre_vide.pack()
+    
+    titre_pseudo = tk.Label(right_frame, text = "Entrez votre pseudo :", bg="#0B5A6F", font=("Helvetica",20), fg="white", justify = "center")
+    titre_pseudo.pack()
+    entree_pseudo=tk.Entry(right_frame, bg="#2B7589", font=("Helvetica",20), fg="white", justify = "center", bd=0)
+    entree_pseudo.pack()
+    
+    titre_mdp = tk.Label(right_frame, text = "Entrez votre mot de passe :", bg="#0B5A6F", font=("Helvetica",20), fg="white", justify = "center")
+    titre_mdp.pack()
+    entree_mdp=tk.Entry(right_frame, bg="#2B7589", font=("Helvetica",20), fg="white", justify = "center", show="*", bd=0)
+    entree_mdp.pack()
+    
+    bouton_confirmer = tk.Button(right_frame, text = "Valider", bg="#0B5A6F", font=("Helvetica",20), fg="white", justify = "center", relief="raised")
+    bouton_confirmer.pack()
+    
+    right_frame.grid(row=0, column = 1, sticky=tk.W)
+    frame.pack(expand=tk.YES)
+
+def accueil():
+    # Création de la fenêtre
+    accueil = tk.Tk()
+    accueil.title("Accueil")
+    accueil.geometry("1080x720")
+    accueil.minsize(540, 360)
+    accueil.maxsize(1080, 720)
+    accueil.iconbitmap("logo.ico")
+    accueil.config(background = "#0B5A6F")
+    accueil_connexion(accueil)
+    
+    create_menu(accueil)
     
     accueil.mainloop()
 
-
-def connect(event, pseudo, mdp):
+def connect(event, pseudo, mdp, frame):
     global connected
     if verifPassword(pseudo, mdp):
         connected = True
+        print("Vous avez été connecté avec succès !")
+        frame.destroy()
     else:
         print("false")
 
