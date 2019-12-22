@@ -5,17 +5,28 @@ import random as rdm
 connected = False
 
 def depuis_csv(fichier):
-    fichier1=open(fichier + '.csv','r',encoding='utf-8')
-    lecteur = csv.DictReader(fichier1,delimiter=',')
-    return [dict(ligne) for ligne in lecteur]
+    try:
+        fichier1=open(fichier + '.csv','r',encoding='utf-8')
+        lecteur = csv.DictReader(fichier1,delimiter=',')
+        return [dict(ligne) for ligne in lecteur]
+    except:
+        vers_csv("Accounts", ["Pseudo", "Mot de passe", "Chiffre de cryptage"])
+        fichier1=open(fichier + '.csv','r',encoding='utf-8')
+        lecteur = csv.DictReader(fichier1,delimiter=',')
+        return [dict(ligne) for ligne in lecteur]
 
 def vers_csv(nom, ordre):
-    fic=open(nom + '.csv', 'w',encoding='utf-8')
-    ecrit= csv.DictWriter(fic,fieldnames=ordre)
-    ecrit.writeheader()
-    table = eval(nom)
-    for ligne in table:
-        ecrit.writerow(ligne)
+    try:
+        fic=open(nom + '.csv', 'w',encoding='utf-8')
+        ecrit= csv.DictWriter(fic,fieldnames=ordre)
+        ecrit.writeheader()
+        table = eval(nom)
+        for ligne in table:
+            ecrit.writerow(ligne)
+    except:
+        fic=open(nom + '.csv', 'w',encoding='utf-8')
+        ecrit= csv.DictWriter(fic,fieldnames=ordre)
+        ecrit.writeheader()
 
 accounts = depuis_csv("Accounts")
 
@@ -184,4 +195,4 @@ def connect(event, pseudo, mdp, frame):
         print("false")
 
 accueil()
-vers_csv("accounts", ["Pseudo", "Mot de passe", "Chiffre de cryptage"])
+vers_csv("Accounts", ["Pseudo", "Mot de passe", "Chiffre de cryptage"])
