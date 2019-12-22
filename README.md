@@ -1,2 +1,2 @@
-# moteur_python
-Projet moteur de jeux python
+# Plateforme de jeux Python
+Projet de plateforme de jeux en python
