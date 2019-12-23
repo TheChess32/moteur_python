@@ -72,8 +72,10 @@ def createAccount(pseudo, mdp):
         new_donnees["Chiffre de cryptage"] = chiffre_de_cryptage
         accounts.append(new_donnees)
         connected = True
-        pseudo_connected = pseudo
+        pseudo_connected = pseudo       
+        vers_csv("accounts", ["Pseudo", "Mot de passe", "Chiffre de cryptage"])
         print(f"Votre compte a été créé avec succès ! Vous êtes désormais connecté avec le pseudo : {pseudo_connected}")
+        
 
 def create_menu(accueil):
     global pseudo_connected
@@ -128,7 +130,7 @@ def accueil_connexion(accueil):
         
         titre_mdp = tk.Label(right_frame, text = "Entrez votre mot de passe :", bg="#0B5A6F", font=("Helvetica",20), fg="white", justify = "center")
         titre_mdp.pack()
-        entree_mdp=tk.Entry(right_frame, bg="#2B7589", font=("Helvetica",20), fg="white", justify = "center", show="*", bd=0)
+        entree_mdp=tk.Entry(right_frame, bg="#2B7589", font=("Helvetica",20), fg="white", justify = "center", show="●", bd=0)
         entree_mdp.pack()
         
         bouton_confirmer = tk.Button(right_frame, text = "Valider", bg="#0B5A6F", font=("Helvetica",20), fg="white", justify = "center", relief="raised")
@@ -215,7 +217,7 @@ def accueil_creation(accueil):
         
         titre_mdp = tk.Label(right_frame, text = "Entrez votre mot de passe :", bg="#0B5A6F", font=("Helvetica",20), fg="white", justify = "center")
         titre_mdp.pack()
-        entree_mdp=tk.Entry(right_frame, bg="#2B7589", font=("Helvetica",20), fg="white", justify = "center", show="*", bd=0)
+        entree_mdp=tk.Entry(right_frame, bg="#2B7589", font=("Helvetica",20), fg="white", justify = "center", show="●", bd=0)
         entree_mdp.pack()
         
         bouton_confirmer = tk.Button(right_frame, text = "Valider", bg="#0B5A6F", font=("Helvetica",20), fg="white", justify = "center", relief="raised")
