@@ -80,10 +80,6 @@ def createAccount(pseudo, mdp):
 def create_menu(accueil):
     global pseudo_connected
     menu_bar = tk.Menu(accueil)
-    file_menu = tk.Menu(menu_bar, tearoff=0)
-    if connected:
-        file_menu.add_command(label = f"Vous êtes connecté avec le pseudo : {pseudo_connected}")
-    file_menu.add_command(label = "Fermer", command=accueil.destroy)
     
     def pre_accueil_connexion(accueil = accueil):
         return accueil_connexion(accueil)
@@ -93,6 +89,18 @@ def create_menu(accueil):
     
     def pre_choix_jeu(accueil = accueil):
         return choix_jeu(accueil)
+    
+    def pre_disconnect(pseudo = pseudo_connected, accueil = accueil):
+        return disconnect(pseudo, accueil)
+    
+    if connected:     
+        profil = tk.Menu(menu_bar, tearoff = 0)
+        profil.add_command(label = f"Vous êtes connecté avec le pseudo : {pseudo_connected}")
+        profil.add_command(label = "Se déconnecter", command=pre_disconnect)
+        menu_bar.add_cascade(label = "Mon profil", menu = profil)
+        
+    file_menu = tk.Menu(menu_bar, tearoff=0)
+    file_menu.add_command(label = "Fermer", command=accueil.destroy)
     
     choisir_jeu = tk.Menu(menu_bar, tearoff=0)
     choisir_jeu.add_command(label = "Jouer à un jeu", command=pre_choix_jeu)
@@ -167,7 +175,6 @@ def choix_jeu(accueil):
     if connected:
         titre = tk.Label(right_frame, text = "Choisissez un jeu :", bg="#0B5A6F", font=("Helvetica",50), fg="white", justify = "center")
         titre.pack()
-        
         
     else:
         titre = tk.Label(right_frame, text = "Vous n'êtes pas connecté :/", bg="#0B5A6F", font=("Helvetica",50), fg="white", justify = "center")
@@ -252,6 +259,13 @@ def connect(event, pseudo, mdp, frame, accueil):
         choix_jeu(accueil)
     else:
         print("false")
+
+def disconnect(pseudo, accueil):
+    global connected
+    global pseudo_connected
+    pseudo_connected = ""
+    connected = False
+    accueil_connexion(accueil)
         
 accueil()
 vers_csv("accounts", ["Pseudo", "Mot de passe", "Chiffre de cryptage"])
