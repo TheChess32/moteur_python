@@ -105,11 +105,17 @@ def create_menu(accueil):
     def pre_disconnect(pseudo = pseudo_connected, accueil = accueil):
         return disconnect(pseudo, accueil)
     
-    if connected:     
+    if connected:
         profil = tk.Menu(menu_bar, tearoff = 0)
         profil.add_command(label = f"Vous êtes connecté avec le pseudo : {pseudo_connected}")
         profil.add_command(label = "Se déconnecter", command=pre_disconnect)
         menu_bar.add_cascade(label = "Mon profil", menu = profil)
+    
+    else:
+        connexion = tk.Menu(menu_bar, tearoff=0)
+        connexion.add_command(label = "Se connecter", command=pre_accueil_connexion)
+        connexion.add_command(label = "Créer un compte", command=pre_accueil_creation)
+        menu_bar.add_cascade(label="Connexion", menu=connexion)
         
     file_menu = tk.Menu(menu_bar, tearoff=0)
     file_menu.add_command(label = "Fermer", command=accueil.destroy)
@@ -117,12 +123,7 @@ def create_menu(accueil):
     choisir_jeu = tk.Menu(menu_bar, tearoff=0)
     choisir_jeu.add_command(label = "Jouer à un jeu", command=pre_choix_jeu)
     
-    connexion = tk.Menu(menu_bar, tearoff=0)
-    connexion.add_command(label = "Se connecter", command=pre_accueil_connexion)
-    connexion.add_command(label = "Créer un compte", command=pre_accueil_creation)
-    
     menu_bar.add_cascade(label="Menu", menu=file_menu)
-    menu_bar.add_cascade(label="Connexion", menu=connexion)
     menu_bar.add_cascade(label="Jeux", menu=choisir_jeu)
     
     accueil.config(menu=menu_bar)
