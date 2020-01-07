@@ -65,7 +65,7 @@ def createAccount(pseudo, mdp):
     cryptage = cryptagePassword(mdp, chiffre_de_cryptage)
     mdp = cryptage
     if accountExists(pseudo):
-        print(f"{pseudo} est déjà utilisé !")
+        return(f"{pseudo} est déjà utilisé !")
     else: 
         new_donnees["Pseudo"] = pseudo
         new_donnees["Mot de passe"] = str(mdp)
@@ -74,7 +74,7 @@ def createAccount(pseudo, mdp):
         connected = True
         pseudo_connected = pseudo       
         vers_csv("accounts", ["Pseudo", "Mot de passe", "Chiffre de cryptage"])
-        print(f"Votre compte a été créé avec succès ! Vous êtes désormais connecté avec le pseudo : {pseudo_connected}")
+        return(f"Votre compte a été créé avec succès ! \nVous êtes désormais connecté avec le pseudo : {pseudo_connected}")
         
 
 def create_menu(accueil):
@@ -229,6 +229,23 @@ def accueil_creation(accueil):
         
         bouton_confirmer = tk.Button(right_frame, text = "Valider", bg="#0B5A6F", font=("Helvetica",20), fg="white", justify = "center", relief="raised")
         bouton_confirmer.pack()
+        
+        def pre_creation(event, pseudo_=entree_pseudo, mdp_=entree_mdp, frame=frame):
+            pseudo_.update()
+            pseudo = pseudo_.get()
+            mdp_.update()
+            mdp = mdp_.get()
+            for widget in accueil.winfo_children():
+                widget.destroy()
+            frame = tk.Frame(accueil, bg = "#0B5A6F")    
+            right_frame = tk.Frame(frame, bg = "#0B5A6F")
+            titre = tk.Label(right_frame, text = createAccount(pseudo, mdp), bg="#0B5A6F", font=("Helvetica",25), fg="white", justify = "center")
+            create_menu(accueil)
+            titre.pack()
+            right_frame.grid(row=0, column = 1, sticky=tk.W)
+            frame.pack(expand=tk.YES)
+        
+        bouton_confirmer.bind("<1>", pre_creation)
         
         right_frame.grid(row=0, column = 1, sticky=tk.W)
         frame.pack(expand=tk.YES)
