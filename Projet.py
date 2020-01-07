@@ -38,16 +38,29 @@ def verifPassword(pseudo, mdp):
             if account["Pseudo"] == pseudo:
                 mdp_crypte = account["Mot de passe"]
                 chiffre_de_cryptage = int(account["Chiffre de cryptage"])
-                if str(cryptagePassword(mdp, chiffre_de_cryptage)) == mdp_crypte:
+                if cryptagePassword(mdp, chiffre_de_cryptage) == mdp_crypte:
                     return True
                 else:
                     return False
 
 def cryptagePassword(mdp, chiffre_de_cryptage):
-    mdp_crypte=[]
+    mdp_crypte_list=[]
     for car in mdp:
-        mdp_crypte.append(ord(car)+chiffre_de_cryptage)
+        mdp_crypte_list.append(ord(car)+chiffre_de_cryptage)
+    mdp_crypte = ""
+    for x in mdp_crypte_list:
+        mdp_crypte = mdp_crypte + chr(x)
     return mdp_crypte
+
+def decryptagePassword(mdp, chiffre_de_cryptage):
+    mdp_decrypte_list=[]
+    for car in mdp:
+        mdp_decrypte_list.append(ord(car)-chiffre_de_cryptage)
+    mdp_decrypte = ""
+    for x in mdp_decrypte_list:
+        mdp_decrypte = mdp_decrypte + chr(x)
+        
+    return mdp_decrypte
 
 def accountExists(pseudo):
     global accounts
@@ -61,14 +74,13 @@ def createAccount(pseudo, mdp):
     global connected
     global pseudo_connected
     new_donnees = {}
-    chiffre_de_cryptage = rdm.randint(5,100)
-    cryptage = cryptagePassword(mdp, chiffre_de_cryptage)
-    mdp = cryptage
+    chiffre_de_cryptage = rdm.randint(500,2000)
+    mdp_crypte = cryptagePassword(mdp, chiffre_de_cryptage)
     if accountExists(pseudo):
         return(f"{pseudo} est déjà utilisé !")
     else: 
         new_donnees["Pseudo"] = pseudo
-        new_donnees["Mot de passe"] = str(mdp)
+        new_donnees["Mot de passe"] = str(mdp_crypte)
         new_donnees["Chiffre de cryptage"] = chiffre_de_cryptage
         accounts.append(new_donnees)
         connected = True
