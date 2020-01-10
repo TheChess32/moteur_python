@@ -59,7 +59,6 @@ def decryptagePassword(mdp, chiffre_de_cryptage):
     mdp_decrypte = ""
     for x in mdp_decrypte_list:
         mdp_decrypte = mdp_decrypte + chr(x)
-        
     return mdp_decrypte
 
 def accountExists(pseudo):
@@ -78,6 +77,8 @@ def createAccount(pseudo, mdp):
     mdp_crypte = cryptagePassword(mdp, chiffre_de_cryptage)
     if accountExists(pseudo):
         return(f"{pseudo} est déjà utilisé !")
+    elif pseudo == "" or mdp == "":
+        return(f"Pseudo ou mot de passe invalide !")
     else: 
         new_donnees["Pseudo"] = pseudo
         new_donnees["Mot de passe"] = str(mdp_crypte)
@@ -296,6 +297,6 @@ def disconnect(pseudo, accueil):
     pseudo_connected = ""
     connected = False
     accueil_connexion(accueil)
-        
+    
 accueil()
 vers_csv("accounts", ["Pseudo", "Mot de passe", "Chiffre de cryptage"])
