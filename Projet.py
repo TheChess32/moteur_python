@@ -6,6 +6,7 @@ connected = False
 pseudo_connected = ""
 
 def depuis_csv(fichier):
+    """Permet de récupérer un fichier csv"""
     try:
         fichier1=open(fichier + '.csv','r',encoding='utf-8')
         lecteur = csv.DictReader(fichier1,delimiter=',')
@@ -17,6 +18,7 @@ def depuis_csv(fichier):
         return [dict(ligne) for ligne in lecteur]
 
 def vers_csv(nom, ordre):
+    """permet de mettre à jour le fichier csv"""
     try:
         fic=open(nom + '.csv', 'w',encoding='utf-8')
         ecrit= csv.DictWriter(fic,fieldnames=ordre)
@@ -32,6 +34,7 @@ def vers_csv(nom, ordre):
 accounts = depuis_csv("Accounts")
 
 def verifPassword(pseudo, mdp):
+    """Permet de vérifier si un mot de passe correspond à un pseudo"""
     global accounts
     if accountExists(pseudo):
         for account in accounts:
@@ -44,6 +47,7 @@ def verifPassword(pseudo, mdp):
                     return False
 
 def cryptagePassword(mdp, chiffre_de_cryptage):
+    """Permet de crypter un mot de passe selon un chiffre de cryptage"""
     mdp_crypte_list=[]
     for car in mdp:
         mdp_crypte_list.append(ord(car)+chiffre_de_cryptage)
@@ -53,6 +57,7 @@ def cryptagePassword(mdp, chiffre_de_cryptage):
     return mdp_crypte
 
 def decryptagePassword(mdp, chiffre_de_cryptage):
+    """Permet de décrypter un mot de passe à partir de son chiffre de cryptage"""
     mdp_decrypte_list=[]
     for car in mdp:
         mdp_decrypte_list.append(ord(car)-chiffre_de_cryptage)
@@ -62,6 +67,7 @@ def decryptagePassword(mdp, chiffre_de_cryptage):
     return mdp_decrypte
 
 def accountExists(pseudo):
+    """Vérifie sur le pseudo entré existe déjà dans le fichier ou non"""
     global accounts
     for account in accounts:
         if account["Pseudo"] == pseudo:
@@ -69,6 +75,7 @@ def accountExists(pseudo):
     return False
 
 def createAccount(pseudo, mdp):
+    """Permet de créer un compte"""
     global accounts
     global connected
     global pseudo_connected
@@ -91,6 +98,7 @@ def createAccount(pseudo, mdp):
         
 
 def create_menu(accueil):
+    """Génère la barre de menu"""
     global pseudo_connected
     menu_bar = tk.Menu(accueil)
     
@@ -130,6 +138,7 @@ def create_menu(accueil):
     accueil.config(menu=menu_bar)
 
 def accueil_connexion(accueil):
+    """Page de connexion"""
     for widget in accueil.winfo_children():
         widget.destroy()
     
@@ -180,6 +189,7 @@ def accueil_connexion(accueil):
         frame.pack(expand=tk.YES)
 
 def choix_jeu(accueil):
+    """Page du choix du jeu"""
     for widget in accueil.winfo_children():
         widget.destroy()
         
@@ -215,6 +225,7 @@ def choix_jeu(accueil):
     frame.pack(expand=tk.YES)
 
 def accueil_creation(accueil):
+    """Page de création de compte"""
     for widget in accueil.winfo_children():
         widget.destroy()
     
@@ -265,7 +276,7 @@ def accueil_creation(accueil):
         frame.pack(expand=tk.YES)
 
 def accueil():
-    # Création de la fenêtre
+    """Page d'accueil"""
     accueil = tk.Tk()
     accueil.title("Accueil")
     accueil.geometry("1080x720")
@@ -280,6 +291,7 @@ def accueil():
     accueil.mainloop()
 
 def connect(event, pseudo, mdp, frame, accueil):
+    """Connecte un compte"""
     global connected
     global pseudo_connected
     if verifPassword(pseudo, mdp):
@@ -289,9 +301,10 @@ def connect(event, pseudo, mdp, frame, accueil):
         frame.destroy()
         choix_jeu(accueil)
     else:
-        print("false")
+        print("Erreur, ce n'est pas le bon mot de passe ou le bon pseudo.")
 
 def disconnect(pseudo, accueil):
+    """Déconnecte un compte"""
     global connected
     global pseudo_connected
     pseudo_connected = ""
